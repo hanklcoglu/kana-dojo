@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kana Dojo</title>
+  <meta name="description" content="Practice hiragana and katakana with quizzes, listening drills and a progress chart.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23c2410c'/><text x='50' y='72' font-size='64' text-anchor='middle' fill='white' font-family='sans-serif'>あ</text></svg>">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">あ</span> Kana Dojo</div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-view="practice" role="tab">Practice</button>
+      <button class="tab" data-view="chart" role="tab">Chart</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- SETUP -->
+    <section id="view-practice" class="view">
+      <div id="setup" class="card">
+        <div class="stats-row" id="stats-row"></div>
+
+        <h2>1. Script</h2>
+        <div class="seg" id="script-seg">
+          <button data-v="hira" class="on">Hiragana<small>ひらがな</small></button>
+          <button data-v="kata">Katakana<small>カタカナ</small></button>
+          <button data-v="both">Both<small>ひ + カ</small></button>
+        </div>
+
+        <h2>2. Mode</h2>
+        <div class="seg" id="mode-seg">
+          <button data-v="type" class="on">Type romaji<small>あ → a</small></button>
+          <button data-v="pick">Pick the kana<small>a → あ</small></button>
+          <button data-v="listen">Listen<small>🔊 → あ</small></button>
+        </div>
+
+        <h2>3. Rows <span class="hint" id="row-count"></span></h2>
+        <div id="row-groups"></div>
+
+        <div class="setup-foot">
+          <label class="len">Questions
+            <select id="len">
+              <option value="10">10</option>
+              <option value="20" selected>20</option>
+              <option value="40">40</option>
+              <option value="0">Endless</option>
+            </select>
+          </label>
+          <button class="primary" id="start">Start practice</button>
+        </div>
+      </div>
+
+      <!-- QUIZ -->
+      <div id="quiz" class="card hidden">
+        <div class="quiz-top">
+          <button class="ghost" id="quit">✕ End</button>
+          <div class="progress"><div class="bar" id="bar"></div></div>
+          <div class="score" id="score">0 / 0</div>
+        </div>
+
+        <div class="prompt" id="prompt"></div>
+        <button class="ghost speak" id="speak" title="Hear it">🔊 Hear it</button>
+
+        <form id="type-form" class="answer hidden" autocomplete="off">
+          <input id="type-input" type="text" inputmode="latin" autocapitalize="off" spellcheck="false" placeholder="type romaji, press Enter">
+        </form>
+        <div id="choices" class="choices hidden"></div>
+
+        <div class="feedback" id="feedback" aria-live="polite"></div>
+        <p class="keys-hint" id="keys-hint"></p>
+      </div>
+
+      <!-- RESULTS -->
+      <div id="results" class="card hidden">
+        <h2 class="center">Session complete</h2>
+        <div class="big-score" id="big-score"></div>
+        <div id="missed"></div>
+        <div class="setup-foot">
+          <button class="ghost" id="back">Change settings</button>
+          <button class="primary" id="again">Practice again</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHART -->
+    <section id="view-chart" class="view hidden">
+      <div class="card">
+        <div class="chart-head">
+          <div class="seg small" id="chart-seg">
+            <button data-v="hira" class="on">Hiragana</button>
+            <button data-v="kata">Katakana</button>
+          </div>
+          <div class="legend">
+            <span><i class="lv lv0"></i>New</span>
+            <span><i class="lv lv1"></i>Learning</span>
+            <span><i class="lv lv2"></i>Familiar</span>
+            <span><i class="lv lv3"></i>Mastered</span>
+          </div>
+        </div>
+        <p class="hint">Tap a kana to hear it. Colours show how well you know each one.</p>
+        <div id="chart"></div>
+        <div class="setup-foot">
+          <button class="ghost" id="export">Export progress</button>
+          <button class="ghost danger" id="reset">Reset progress</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">Progress is saved in this browser only.</footer>
+
+  <script src="kana.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
