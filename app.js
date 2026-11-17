@@ -354,6 +354,37 @@
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   });
+  $("#import").addEventListener("click", () => $("#backup-file").click());
+  $("#backup-file").addEventListener("change", async event => {
+    const input = event.target;
+    const file = input.files[0];
+    const status = $("#backup-status");
+    if (!file) return;
+    const count = n => Number.isSafeInteger(n) && n >= 0;
+    try {
+      const data = JSON.parse(await file.text());
+      if (!data?.progress || typeof data.progress !== "object" || Array.isArray(data.progress)
+          || !count(data.answered) || !count(data.correct) || data.correct > data.answered
+          || !count(data.days?.streak) || !(data.days.last === null || /^\d{4}-\d{2}-\d{2}$/.test(data.days.last))
+          || Object.entries(data.progress).some(([kana, record]) =>
+            !Object.hasOwn(BY_CHAR, kana) || !record || !count(record.c) || !count(record.w)
+            || !count(record.s) || record.s > record.c)) {
+        throw new Error("Invalid backup");
+      }
+      if (!confirm("Replace your current practice record with this backup?")) return;
+      const next = { ...state, progress: data.progress, answered: data.answered,
+        correct: data.correct, days: data.days };
+      localStorage.setItem(STORE_KEY, JSON.stringify(next));
+      Object.assign(state, next);
+      status.textContent = "Progress restored.";
+      renderChart();
+      renderStats();
+    } catch {
+      status.textContent = "Could not restore this Kana Dojo backup.";
+    } finally {
+      input.value = "";
+    }
+  });
   $("#reset").addEventListener("click", () => {
     if (!confirm("Reset all progress? This cannot be undone.")) return;
     state.progress = {}; state.answered = 0; state.correct = 0; state.days = { last: null, streak: 0 };
