@@ -107,6 +107,9 @@
         <div id="chart"></div>
         <div class="setup-foot">
           <button class="ghost" id="export">Export progress</button>
+          <button class="ghost" id="import">Restore backup</button>
+          <input type="file" id="backup-file" accept=".json,application/json" hidden>
+          <span id="backup-status" class="hint" role="status"></span>
           <button class="ghost danger" id="reset">Reset progress</button>
         </div>
       </div>
